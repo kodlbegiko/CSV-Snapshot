@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/kodlbegiko/CSV-Snapshot/blob/main/src/csv_snapshot/snapshot-schema.json",
+  "title": "CSV Snapshot schema v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["snapshotSchemaVersion", "toolVersion", "source", "csv", "columns"],
+  "properties": {
+    "snapshotSchemaVersion": {"const": "1"},
+    "toolVersion": {"type": "string"},
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["fileName", "fileSizeBytes", "contentHash"],
+      "properties": {
+        "fileName": {"type": "string"},
+        "fileSizeBytes": {"type": "integer", "minimum": 0},
+        "contentHash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+      }
+    },
+    "csv": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["delimiter", "hasHeader", "encoding", "rowCount", "columnCount"],
+      "properties": {
+        "delimiter": {"type": "string", "minLength": 1, "maxLength": 1},
+        "hasHeader": {"const": true},
+        "encoding": {"enum": ["utf-8", "utf-8-sig"]},
+        "rowCount": {"type": "integer", "minimum": 0},
+        "columnCount": {"type": "integer", "minimum": 0}
+      }
+    },
+    "columns": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "position", "inferredType", "nullable", "nullCount", "nullRate", "nonNullCount", "distinctCount"],
+        "properties": {
+          "name": {"type": "string"},
+          "position": {"type": "integer", "minimum": 0},
+          "inferredType": {"enum": ["integer", "float", "boolean", "date", "datetime", "string", "null", "mixed"]},
+          "nullable": {"type": "boolean"},
+          "nullCount": {"type": "integer", "minimum": 0},
+          "nullRate": {"type": "number", "minimum": 0, "maximum": 1},
+          "nonNullCount": {"type": "integer", "minimum": 0},
+          "distinctCount": {"type": "integer", "minimum": 0},
+          "metrics": {"type": ["object", "null"]}
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,3 @@
+email,token
+alice@example.test,secret-token-1
+bob@example.test,secret-token-2

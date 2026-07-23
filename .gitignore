@@ -12,3 +12,4 @@ build/
 *.snapshot.json
 benchmark-output/
 .DS_Store
+!examples/snapshots/*.snapshot.json

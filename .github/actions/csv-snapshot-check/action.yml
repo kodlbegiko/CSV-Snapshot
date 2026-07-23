@@ -1,0 +1,42 @@
+name: CSV Snapshot Check
+description: Validate a CSV against a committed quality snapshot
+inputs:
+  csv-path:
+    description: Path to the current CSV
+    required: true
+  snapshot-path:
+    description: Path to the committed baseline snapshot
+    required: true
+  config-path:
+    description: Optional path to csv-snapshot.toml
+    required: false
+    default: ""
+  warnings-as-errors:
+    description: Treat warnings as blocking failures
+    required: false
+    default: "false"
+runs:
+  using: composite
+  steps:
+    - name: Install CSV Snapshot from this action checkout
+      shell: bash
+      run: |
+        set -o pipefail
+        python -m pip install "$GITHUB_ACTION_PATH/../../.." 2>&1 | tee -a "$RUNNER_TEMP/csv-snapshot-action.log"
+    - name: Validate CSV
+      shell: bash
+      env:
+        CSV_PATH: ${{ inputs.csv-path }}
+        SNAPSHOT_PATH: ${{ inputs.snapshot-path }}
+        CONFIG_PATH: ${{ inputs.config-path }}
+        WARNINGS_AS_ERRORS: ${{ inputs.warnings-as-errors }}
+      run: |
+        set -o pipefail
+        args=(check "$CSV_PATH" --snapshot "$SNAPSHOT_PATH" --ci)
+        if [ -n "$CONFIG_PATH" ]; then
+          args+=(--config "$CONFIG_PATH")
+        fi
+        if [ "$WARNINGS_AS_ERRORS" = "true" ]; then
+          args+=(--warnings-as-errors)
+        fi
+        csv-snapshot "${args[@]}" 2>&1 | tee -a "$RUNNER_TEMP/csv-snapshot-action.log"

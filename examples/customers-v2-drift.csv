@@ -1,0 +1,4 @@
+customer_id,age,active,joined_at
+C001,-21,true,2026-01-01
+C002,NULL,true,2026-01-03
+C003,NULL,false,2026-01-04

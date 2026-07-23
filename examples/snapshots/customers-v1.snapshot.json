@@ -1,0 +1,99 @@
+{
+  "columns": [
+    {
+      "distinctCount": 10,
+      "inferredType": "string",
+      "metrics": {
+        "emptyStringCount": 0,
+        "emptyStringRate": 0.0,
+        "maxLength": 4,
+        "meanLength": 4.0,
+        "minLength": 4
+      },
+      "name": "customer_id",
+      "nonNullCount": 10,
+      "nullCount": 0,
+      "nullRate": 0.0,
+      "nullable": false,
+      "position": 0
+    },
+    {
+      "distinctCount": 10,
+      "inferredType": "integer",
+      "metrics": {
+        "max": 50,
+        "mean": 34.3,
+        "min": 21,
+        "negativeCount": 0,
+        "standardDeviation": 9.121951545585,
+        "zeroCount": 0
+      },
+      "name": "age",
+      "nonNullCount": 10,
+      "nullCount": 0,
+      "nullRate": 0.0,
+      "nullable": false,
+      "position": 1
+    },
+    {
+      "distinctCount": 10,
+      "inferredType": "string",
+      "metrics": {
+        "emptyStringCount": 0,
+        "emptyStringRate": 0.0,
+        "maxLength": 18,
+        "meanLength": 16.9,
+        "minLength": 16
+      },
+      "name": "email",
+      "nonNullCount": 10,
+      "nullCount": 0,
+      "nullRate": 0.0,
+      "nullable": false,
+      "position": 2
+    },
+    {
+      "distinctCount": 2,
+      "inferredType": "boolean",
+      "metrics": {
+        "falseCount": 3,
+        "trueCount": 7
+      },
+      "name": "active",
+      "nonNullCount": 10,
+      "nullCount": 0,
+      "nullRate": 0.0,
+      "nullable": false,
+      "position": 3
+    },
+    {
+      "distinctCount": 10,
+      "inferredType": "date",
+      "metrics": {
+        "earliest": "2026-01-01",
+        "latest": "2026-01-22",
+        "parseSuccessRate": 1.0
+      },
+      "name": "joined_at",
+      "nonNullCount": 10,
+      "nullCount": 0,
+      "nullRate": 0.0,
+      "nullable": false,
+      "position": 4
+    }
+  ],
+  "csv": {
+    "columnCount": 5,
+    "delimiter": ",",
+    "encoding": "utf-8",
+    "hasHeader": true,
+    "rowCount": 10
+  },
+  "snapshotSchemaVersion": "1",
+  "source": {
+    "contentHash": "sha256:23e5dd8e1136db34744088e57cf1cd6e620a81b1267cc5d4c75f30f645669724",
+    "fileName": "customers-v1.csv",
+    "fileSizeBytes": 461
+  },
+  "toolVersion": "0.1.0"
+}
