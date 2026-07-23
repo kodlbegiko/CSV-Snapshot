@@ -87,3 +87,10 @@ jobs:
           csv-path: examples/customers-v2-valid.csv
           snapshot-path: examples/snapshots/customers-v1.snapshot.json
           config-path: examples/csv-snapshot.toml
+      - name: Upload composite action diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: composite-action-diagnostics
+          path: ${{ runner.temp }}/csv-snapshot-action.log
+          if-no-files-found: warn
