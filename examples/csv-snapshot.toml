@@ -1,0 +1,32 @@
+[snapshot]
+delimiter = ","
+encoding = "utf-8"
+hash_algorithm = "sha256"
+null_values = ["NULL", "null", "NA", "N/A"]
+
+[comparison]
+column_order = "warning"
+new_columns = "warning"
+removed_columns = "error"
+type_changes = "error"
+nullable_changes = "warning"
+
+[thresholds]
+row_count_relative_change = 0.20
+null_rate_absolute_change = 0.20
+numeric_mean_relative_change = 0.25
+distinct_count_relative_change = 0.50
+
+[columns.customer_id]
+type = "string"
+nullable = false
+
+[columns.age]
+type = "integer"
+nullable = true
+min = 0
+max = 130
+
+[columns.email]
+type = "string"
+nullable = false

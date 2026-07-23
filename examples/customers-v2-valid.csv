@@ -1,0 +1,12 @@
+customer_id,age,email,active,joined_at
+C001,21,one@example.test,true,2026-01-01
+C002,35,two@example.test,true,2026-01-03
+C003,29,three@example.test,false,2026-01-04
+C004,42,four@example.test,true,2026-01-08
+C005,31,five@example.test,true,2026-01-09
+C006,27,six@example.test,false,2026-01-11
+C007,50,seven@example.test,true,2026-01-14
+C008,38,eight@example.test,true,2026-01-17
+C009,24,nine@example.test,false,2026-01-20
+C010,46,ten@example.test,true,2026-01-22
+C011,33,eleven@example.test,true,2026-01-25

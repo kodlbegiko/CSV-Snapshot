@@ -1,0 +1,79 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  cross-platform:
+    name: ${{ matrix.os }} / Python ${{ matrix.python-version }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        python-version: ["3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+      - run: python -m pip install --upgrade pip
+      - run: python -m pip install -e ".[dev]"
+      - run: ruff check .
+      - run: ruff format --check .
+      - run: mypy src
+      - run: pytest
+      - run: python -m build
+
+  quality:
+    name: Coverage, package, dogfood, performance
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: python -m pip install --upgrade pip
+      - run: python -m pip install -e ".[dev]"
+      - run: pytest --cov=csv_snapshot --cov-branch --cov-report=term-missing
+      - run: python -m build
+      - run: twine check dist/*
+      - name: Install and exercise the built wheel
+        shell: bash
+        run: |
+          python -m venv .venv-smoke
+          . .venv-smoke/bin/activate
+          python -m pip install --upgrade pip
+          python -m pip install dist/*.whl
+          csv-snapshot --version
+          csv-snapshot create examples/customers-v1.csv --config examples/csv-snapshot.toml --output /tmp/smoke.snapshot.json
+          csv-snapshot check examples/customers-v1.csv --config examples/csv-snapshot.toml --snapshot /tmp/smoke.snapshot.json
+      - name: Dogfood valid and drift cases
+        shell: bash
+        run: |
+          csv-snapshot create examples/customers-v1.csv --config examples/csv-snapshot.toml --output /tmp/customers.snapshot.json
+          csv-snapshot check examples/customers-v2-valid.csv --config examples/csv-snapshot.toml --snapshot /tmp/customers.snapshot.json --format json --output /tmp/valid.json
+          set +e
+          csv-snapshot check examples/customers-v2-drift.csv --config examples/csv-snapshot.toml --snapshot /tmp/customers.snapshot.json --format markdown --output /tmp/drift.md
+          code=$?
+          set -e
+          test "$code" -eq 1
+          python -m json.tool /tmp/valid.json >/dev/null
+          grep -q "schema.column_removed" /tmp/drift.md
+          csv-snapshot create examples/customers-v1.csv --config examples/csv-snapshot.toml --output /tmp/customers-2.snapshot.json
+          cmp /tmp/customers.snapshot.json /tmp/customers-2.snapshot.json
+      - name: Performance smoke
+        run: python benchmarks/profile_benchmark.py --megabytes 1 --output /tmp/benchmark.json
+      - name: Composite action smoke
+        uses: ./.github/actions/csv-snapshot-check
+        with:
+          csv-path: examples/customers-v2-valid.csv
+          snapshot-path: examples/snapshots/customers-v1.snapshot.json
+          config-path: examples/csv-snapshot.toml
