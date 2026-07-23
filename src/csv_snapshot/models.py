@@ -7,9 +7,7 @@ from typing import Any, Literal
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 Severity = Literal["error", "warning", "info"]
-InferredType = Literal[
-    "integer", "float", "boolean", "date", "datetime", "string", "null", "mixed"
-]
+InferredType = Literal["integer", "float", "boolean", "date", "datetime", "string", "null", "mixed"]
 
 
 class StrictModel(BaseModel):

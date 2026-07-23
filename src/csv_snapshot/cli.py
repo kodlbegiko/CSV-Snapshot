@@ -2,8 +2,9 @@
 
 from __future__ import annotations
 
+from collections.abc import Callable
 from pathlib import Path
-from typing import Annotated, Callable, TypeVar
+from typing import Annotated, TypeVar
 
 import typer
 
@@ -73,9 +74,7 @@ def create_command(
     output: Annotated[Path | None, typer.Option("--output", "-o")] = None,
     config: Annotated[Path | None, typer.Option("--config")] = None,
     delimiter: Annotated[str | None, typer.Option("--delimiter")] = None,
-    force: Annotated[
-        bool, typer.Option("--force", help="Replace an existing snapshot.")
-    ] = False,
+    force: Annotated[bool, typer.Option("--force", help="Replace an existing snapshot.")] = False,
 ) -> None:
     """Create a deterministic quality snapshot."""
 

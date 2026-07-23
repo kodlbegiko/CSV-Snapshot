@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import re
-from datetime import date, datetime, timezone
+from datetime import UTC, date, datetime
 from decimal import Decimal, InvalidOperation
 
 _INTEGER_RE = re.compile(r"^[+-]?(?:0|[1-9][0-9]*)$")
@@ -92,4 +92,4 @@ def _parse_datetime(value: str) -> datetime | None:
         return None
     if parsed.tzinfo is None:
         return parsed
-    return parsed.astimezone(timezone.utc).replace(tzinfo=None)
+    return parsed.astimezone(UTC).replace(tzinfo=None)

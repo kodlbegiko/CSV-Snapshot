@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import contextlib
 import json
 import os
 import tempfile
@@ -19,13 +20,16 @@ def json_text(value: Snapshot | ComparisonReport | dict[str, Any]) -> str:
         payload = value.model_dump(by_alias=True, exclude_none=True)
     else:
         payload = value
-    return json.dumps(
-        payload,
-        ensure_ascii=False,
-        indent=2,
-        sort_keys=True,
-        allow_nan=False,
-    ) + "\n"
+    return (
+        json.dumps(
+            payload,
+            ensure_ascii=False,
+            indent=2,
+            sort_keys=True,
+            allow_nan=False,
+        )
+        + "\n"
+    )
 
 
 def atomic_write_text(path: Path, content: str, *, force: bool = False) -> None:
@@ -45,10 +49,8 @@ def atomic_write_text(path: Path, content: str, *, force: bool = False) -> None:
             os.fsync(handle.fileno())
         os.replace(temporary_name, path)
     except OSError as exc:
-        try:
+        with contextlib.suppress(OSError):
             os.unlink(temporary_name)
-        except OSError:
-            pass
         raise OutputError(f"unable to write output: {path}") from exc
 
 

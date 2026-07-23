@@ -279,12 +279,8 @@ def _build_metrics(
         return NumericMetrics(
             min=_number_for_json(accumulator.numeric.minimum, inferred_type),
             max=_number_for_json(accumulator.numeric.maximum, inferred_type),
-            mean=_clean_float(accumulator.numeric.mean)
-            if accumulator.numeric.count
-            else None,
-            standardDeviation=_clean_float(variance.sqrt())
-            if accumulator.numeric.count
-            else None,
+            mean=_clean_float(accumulator.numeric.mean) if accumulator.numeric.count else None,
+            standardDeviation=_clean_float(variance.sqrt()) if accumulator.numeric.count else None,
             zeroCount=accumulator.numeric.zero_count,
             negativeCount=accumulator.numeric.negative_count,
         )

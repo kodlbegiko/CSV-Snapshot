@@ -51,9 +51,7 @@ def render_markdown(report: ComparisonReport) -> str:
                 f"{finding.column or '—'} | {message} |"
             )
             if finding.suggestion:
-                lines.append(
-                    f"\n**Suggestion ({finding.rule_id}):** {finding.suggestion}\n"
-                )
+                lines.append(f"\n**Suggestion ({finding.rule_id}):** {finding.suggestion}\n")
     return "\n".join(lines).rstrip() + "\n"
 
 

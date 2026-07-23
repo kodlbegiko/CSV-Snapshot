@@ -23,7 +23,7 @@ class SnapshotConfig(ConfigModel):
     null_values: list[str] = Field(default_factory=lambda: ["NULL", "null", "NA", "N/A"])
 
     @model_validator(mode="after")
-    def validate_delimiter(self) -> "SnapshotConfig":
+    def validate_delimiter(self) -> SnapshotConfig:
         if len(self.delimiter) != 1:
             raise ValueError("delimiter must be exactly one character")
         return self
@@ -45,16 +45,16 @@ class ThresholdConfig(ConfigModel):
 
 
 class ColumnRule(ConfigModel):
-    type: Literal[
-        "integer", "float", "boolean", "date", "datetime", "string", "null", "mixed"
-    ] | None = None
+    type: (
+        Literal["integer", "float", "boolean", "date", "datetime", "string", "null", "mixed"] | None
+    ) = None
     nullable: bool | None = None
     min: float | None = None
     max: float | None = None
     max_null_rate: float | None = Field(default=None, ge=0, le=1)
 
     @model_validator(mode="after")
-    def validate_bounds(self) -> "ColumnRule":
+    def validate_bounds(self) -> ColumnRule:
         if self.min is not None and self.max is not None and self.min > self.max:
             raise ValueError("min must not be greater than max")
         return self

@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pytest
 
-from csv_snapshot.config import AppConfig, DEFAULT_CONFIG, discover_config, load_config
+from csv_snapshot.config import DEFAULT_CONFIG, AppConfig, discover_config, load_config
 from csv_snapshot.errors import ConfigurationError
 
 

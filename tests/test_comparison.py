@@ -120,8 +120,7 @@ def test_numeric_bounds(tmp_path: Path, config: AppConfig, rule: ColumnRule, exp
 def test_findings_are_stably_sorted(fixtures_dir: Path) -> None:
     report = compare_pair(fixtures_dir, "numeric-range-drift")
     keys = [
-        (finding.severity, finding.column or "", finding.rule_id)
-        for finding in report.findings
+        (finding.severity, finding.column or "", finding.rule_id) for finding in report.findings
     ]
     severity = {"error": 0, "warning": 1, "info": 2}
     assert keys == sorted(keys, key=lambda item: (severity[item[0]], item[1], item[2]))

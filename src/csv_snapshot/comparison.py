@@ -11,10 +11,10 @@ from .models import (
     Finding,
     NumericMetrics,
     ReportSummary,
+    Severity,
     Snapshot,
     StringMetrics,
     TemporalMetrics,
-    Severity,
 )
 from .version import __version__
 
