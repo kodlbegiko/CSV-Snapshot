@@ -17,6 +17,13 @@ def test_snapshot_round_trip(fixtures_dir: Path, config, tmp_path: Path) -> None
     assert load_snapshot(path) == snapshot
 
 
+def test_committed_example_snapshot_is_loadable() -> None:
+    path = Path(__file__).parents[1] / "examples/snapshots/customers-v1.snapshot.json"
+    snapshot = load_snapshot(path)
+    assert snapshot.snapshot_schema_version == "1"
+    assert snapshot.csv.row_count == 10
+
+
 def test_json_is_sorted_and_valid(fixtures_dir: Path, config) -> None:
     text = json_text(profile_csv(fixtures_dir / "simple-valid/data.csv", config))
     payload = json.loads(text)
