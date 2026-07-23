@@ -1,0 +1,11 @@
+include README.md
+include LICENSE
+include CHANGELOG.md
+include src/csv_snapshot/snapshot-schema.json
+include src/csv_snapshot/py.typed
+prune tests
+prune benchmarks
+prune examples
+prune .github
+exclude .coverage
+recursive-exclude * __pycache__ *.py[cod]
