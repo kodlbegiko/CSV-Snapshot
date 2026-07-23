@@ -1,15 +1,18 @@
 name: Release CSV Snapshot v0.1.0
 
 on:
-  push:
-    branches: [main]
+  pull_request:
+    types: [closed]
 
 permissions:
   contents: write
 
 jobs:
   release:
-    if: github.event.head_commit.message == 'chore: publish CSV Snapshot v0.1.0 release'
+    if: >-
+      github.event.pull_request.merged == true &&
+      github.event.pull_request.base.ref == 'main' &&
+      github.event.pull_request.title == 'chore: trigger CSV Snapshot v0.1.0 release'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
