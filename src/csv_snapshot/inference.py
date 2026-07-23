@@ -5,6 +5,9 @@ from __future__ import annotations
 import re
 from datetime import UTC, date, datetime
 from decimal import Decimal, InvalidOperation
+from typing import cast
+
+from .models import InferredType
 
 _INTEGER_RE = re.compile(r"^[+-]?(?:0|[1-9][0-9]*)$")
 _FLOAT_RE = re.compile(
@@ -17,7 +20,7 @@ _LEADING_ZERO_RE = re.compile(r"^[+-]?0[0-9]+$")
 _BOOLEAN_VALUES = {"true": True, "false": False}
 
 
-def classify(value: str) -> str:
+def classify(value: str) -> InferredType:
     lowered = value.lower()
     if lowered in _BOOLEAN_VALUES:
         return "boolean"
@@ -39,7 +42,7 @@ def classify(value: str) -> str:
     return "string"
 
 
-def merge_types(types: set[str]) -> str:
+def merge_types(types: set[str]) -> InferredType:
     if not types:
         return "null"
     if types <= {"integer"}:
@@ -47,7 +50,7 @@ def merge_types(types: set[str]) -> str:
     if types <= {"integer", "float"}:
         return "float" if "float" in types else "integer"
     if len(types) == 1:
-        return next(iter(types))
+        return cast(InferredType, next(iter(types)))
     return "mixed"
 
 
